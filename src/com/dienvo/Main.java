@@ -40,17 +40,21 @@ public class Main {
     private static void readFile() {
         try {
             String fileName = "textmsg.txt";
+            //read number of dictionary, prohibited and message
             List<String> itemNumber = Files.lines(Paths.get(fileName).toAbsolutePath(), StandardCharsets.UTF_8)
                     .filter(line -> line.matches("\\d+"))
                     .collect(Collectors.toList());
+            //dictionary start from second line, limit by number of item dictionary
             dict = Files.lines(Paths.get(fileName).toAbsolutePath(), StandardCharsets.UTF_8)
                     .skip(1)
                     .limit(Integer.parseInt(itemNumber.get(0)))
                     .collect(Collectors.toList());
+            //prohibited words start after sum of dictionary line and number of dict, prohibited words (2) limit by number of prohibited words
             prohibited = Files.lines(Paths.get(fileName).toAbsolutePath(), StandardCharsets.UTF_8)
                     .skip(Integer.parseInt(itemNumber.get(0)) + 2)
                     .limit(Integer.parseInt(itemNumber.get(1)))
                     .collect(Collectors.toList());
+            //message start after dict and prohibited words. Increase by 2 (*2) because 2 line is one message.
             List<String> message = Files.lines(Paths.get(fileName).toAbsolutePath(), StandardCharsets.UTF_8)
                     .skip(Integer.parseInt(itemNumber.get(0)) + Integer.parseInt(itemNumber.get(1)) + 3)
                     .limit(Integer.parseInt(itemNumber.get(2)) * 2)
